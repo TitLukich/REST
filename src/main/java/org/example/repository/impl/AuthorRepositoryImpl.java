@@ -4,12 +4,16 @@ import org.example.db.ConnectionMyDB;
 import org.example.model.Author;
 import org.example.model.Book;
 import org.example.repository.AuthorRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AuthorRepositoryImpl implements AuthorRepository {
     private final ConnectionMyDB connection;
+    private static final Logger logger = LoggerFactory.getLogger(AuthorRepositoryImpl.class);
+    private static final String ERROR = "An error occurred";
 
     public AuthorRepositoryImpl(ConnectionMyDB connection) {
         this.connection = connection;
@@ -27,7 +31,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
                 return author;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(ERROR, e);
         }
         return null;
     }
@@ -46,7 +50,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
                 authors.add(author);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(ERROR, e);
         }
         return authors;
     }
@@ -62,7 +66,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
                 author.setId(rs.getInt(1));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(ERROR, e);
         }
         return author;
     }
@@ -89,7 +93,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(ERROR, e);
         }
         return false;
     }
@@ -106,7 +110,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
                 books.add(book);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(ERROR, e);
         }
         return books;
     }

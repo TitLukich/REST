@@ -3,6 +3,9 @@ import org.example.db.ConnectionMyDB;
 import org.example.model.Author;
 import org.example.model.Book;
 import org.example.repository.BookRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +14,8 @@ public class BookRepositoryImpl implements BookRepository {
     private final ConnectionMyDB connection;
     static final String AUTHOR_ID = "author_id";
     private static final String TITLE = "title";
+    private static final Logger logger = LoggerFactory.getLogger(BookRepositoryImpl.class);
+    private static final String ERROR = "An error occurred";
 
     public BookRepositoryImpl(ConnectionMyDB connection) {
         this.connection = connection;
@@ -29,7 +34,7 @@ public class BookRepositoryImpl implements BookRepository {
                 return book;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(ERROR, e);
         }
         return null;
     }
@@ -75,7 +80,7 @@ public class BookRepositoryImpl implements BookRepository {
                 return rs.getInt(1) > 0;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(ERROR, e);
         }
         return false;
     }
@@ -104,7 +109,7 @@ public class BookRepositoryImpl implements BookRepository {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(ERROR, e);
         }
         return true;
     }
@@ -124,7 +129,7 @@ public class BookRepositoryImpl implements BookRepository {
                 books.add(book);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(ERROR, e);
         }
         return books;
     }
@@ -143,7 +148,7 @@ public class BookRepositoryImpl implements BookRepository {
                 relatedBooks.add(foundBook);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(ERROR, e);
         }
         return relatedBooks;
     }
@@ -176,7 +181,7 @@ public class BookRepositoryImpl implements BookRepository {
             stmt.setInt(1, bookId);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(ERROR, e);
         }
     }
 
@@ -189,7 +194,7 @@ public class BookRepositoryImpl implements BookRepository {
                 return new Author(rs.getInt("id"), rs.getString("name"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(ERROR, e);
         }
         return null;
     }

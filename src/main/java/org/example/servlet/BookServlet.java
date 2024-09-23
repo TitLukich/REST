@@ -11,6 +11,8 @@ import org.example.repository.impl.AuthorRepositoryImpl;
 import org.example.repository.impl.BookRepositoryImpl;
 import org.example.service.impl.BookService;
 import org.example.servlet.dto.BookDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,6 +22,7 @@ public class BookServlet extends HttpServlet {
     private transient BookService bookService;
     private static final String SERVER_ERROR = "\"{\\\"error\\\":\\\"Server error\\\"}\"";
     private static final String INVALID_ID_FORMAT = "{\"error\":\"Invalid ID format\"}";
+    private static final Logger logger = LoggerFactory.getLogger(BookServlet.class);
 
     public void setBookService(BookService bookService) {
         this.bookService = bookService;
@@ -61,7 +64,7 @@ public class BookServlet extends HttpServlet {
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().write(SERVER_ERROR);
-            e.printStackTrace();
+            logger.error(SERVER_ERROR, e);
         }
     }
 
@@ -83,7 +86,7 @@ public class BookServlet extends HttpServlet {
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().write( "{\"" + SERVER_ERROR + e.getMessage() + "\"}");
-            e.printStackTrace();
+            logger.error(SERVER_ERROR, e);
         }
     }
 
@@ -104,7 +107,6 @@ public class BookServlet extends HttpServlet {
                 return;
             }
             bookService.updateBook(id, bookDTO);
-            System.out.println("Updated book ID: " + id + " with new title: " + bookDTO.getTitle());
             resp.setStatus(HttpServletResponse.SC_OK);
         } catch (NumberFormatException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -115,7 +117,7 @@ public class BookServlet extends HttpServlet {
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().write(SERVER_ERROR);
-            e.printStackTrace();
+            logger.error(SERVER_ERROR, e);
         }
     }
 
@@ -137,7 +139,7 @@ public class BookServlet extends HttpServlet {
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().write(SERVER_ERROR);
-            e.printStackTrace();
+            logger.error(SERVER_ERROR, e);
         }
     }
 }
